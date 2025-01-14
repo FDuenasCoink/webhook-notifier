@@ -72,12 +72,7 @@ app.post('/webhook', (req, res) => {
 
     io.to(session_id).emit(
       'status_change',
-      JSON.stringify({
-        session_id,
-        status,
-        created_at,
-        vendor_data,
-      }),
+      { session_id, status, created_at, vendor_data },
     );
 
     res.json({ message: "Webhook event dispatched" });
