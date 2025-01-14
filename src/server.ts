@@ -1,16 +1,24 @@
+import 'dotenv/config';
 import express from 'express';
 import http from 'node:http';
 import crypto from 'node:crypto';
 import { Server } from 'socket.io';
+import { createAdapter } from '@socket.io/redis-adapter';
+import { Redis } from "ioredis";
+
+const PORT = process.env.PORT || 3_000;
+const WEBHOOK_SECRET_KEY = process.env.WEBHOOK_SECRET_KEY || "YOUR_WEBHOOK_SECRET_KEY";
+const REDIS_URL = process.env.REDIS_URL || '';
+
+const pubClient = new Redis(REDIS_URL);
+const subClient = pubClient.duplicate();
 
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   transports: ['websocket'],
+  adapter: createAdapter(pubClient, subClient),
 });
-
-const PORT = process.env.PORT || 3_000;
-const WEBHOOK_SECRET_KEY = process.env.WEBHOOK_SECRET_KEY || "YOUR_WEBHOOK_SECRET_KEY";
 
 app.use(
   express.json({
