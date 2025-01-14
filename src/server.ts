@@ -63,8 +63,14 @@ app.post('/webhook', (req, res) => {
       return;
     }
 
-    const data = JSON.stringify({ session_id, status, vendor_data });
-    io.to(session_id).emit(data);
+    io.to(session_id).emit(
+      JSON.stringify({ 
+        session_id, 
+        status, 
+        vendor_data,
+        decision,
+      })
+    );
 
     res.json({ message: "Webhook event dispatched" });
   } catch {
