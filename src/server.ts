@@ -64,6 +64,7 @@ app.post('/webhook', (req, res) => {
     }
 
     io.to(session_id).emit(
+      'status_change',
       JSON.stringify({ 
         session_id, 
         status, 
