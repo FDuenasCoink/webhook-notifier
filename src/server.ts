@@ -24,7 +24,7 @@ app.use(
 
 app.get('/', (_req, res) => {
   res.send(`
-    <h1>Hola mundo</h1>
+    <h1>webhook notifier api</h1>
   `)
 });
 
