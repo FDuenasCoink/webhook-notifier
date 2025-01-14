@@ -56,21 +56,10 @@ app.post('/webhook', (req, res) => {
     }
 
     const jsonBody = JSON.parse(rawBody);
-    const { session_id, status, vendor_data, decision } = jsonBody;
 
-    if (!decision) {
-      res.json({ message: "Webhook event dispatched" });
-      return;
-    }
-
-    io.to(session_id).emit(
+    io.to(jsonBody.session_id).emit(
       'status_change',
-      JSON.stringify({ 
-        session_id, 
-        status, 
-        vendor_data,
-        decision,
-      })
+      rawBody,
     );
 
     res.json({ message: "Webhook event dispatched" });
