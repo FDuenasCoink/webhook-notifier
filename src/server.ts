@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import express from 'express';
+import cors from 'cors'
 import http from 'node:http';
 import crypto from 'node:crypto';
 import { Server } from 'socket.io';
@@ -20,6 +21,7 @@ const io = new Server(server, {
   adapter: createAdapter(pubClient, subClient),
 });
 
+app.use(cors());
 app.use(
   express.json({
     verify: (req, _res, buf, encoding: BufferEncoding) => {
@@ -40,7 +42,7 @@ app.post('/webhook', (req, res) => {
   try {
     const signature = req.get("X-Signature");
     const timestamp = req.get("X-Timestamp");
-    const rawBody = (req as any).rawBody;
+    const rawBody = (req as any)['rawBody'];
 
     if (!signature || !timestamp || !rawBody || !WEBHOOK_SECRET_KEY) {
       res.status(401).json({ message: "Unauthorized" });
