@@ -75,7 +75,12 @@ app.post('/webhook', (req, res) => {
 
     io.to(session_id).emit(
       'status_change',
-      { session_id, status, created_at, vendor_data },
+      { 
+        session_id, 
+        status: (status as string).toUpperCase().replace(/\ /g, '_'), 
+        created_at, 
+        vendor_data 
+      },
     );
 
     res.json({ message: "Webhook event dispatched" });
